@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import shopifyService from '../services/shopifyService';
 
-export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
+export const createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { name, description, price, image } = req.body;
     const product = await shopifyService.createProduct({ name, description, price, image });
