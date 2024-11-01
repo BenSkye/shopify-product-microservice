@@ -1,7 +1,5 @@
 import axios from 'axios';
-import shopifyConfig from '../config/shopifyConfig';
-
-const SHOPIFY_API_URL = `https://${shopifyConfig.SHOP_NAME}.myshopify.com/admin/api/2021-04/products.json`;
+import {shopifyConfig } from '../config';
 
 interface ProductData {
   name: string;
@@ -12,8 +10,16 @@ interface ProductData {
 
 export const createProduct = async (productData: ProductData) => {
   try {
+    console.log('Sending request to Shopify:', {
+      url: shopifyConfig.getAdminApiUrl(),
+      headers: {
+        'X-Shopify-Access-Token': shopifyConfig.apiSecret,
+        'Content-Type': 'application/json'
+      },
+      data: { product: productData }
+    });
     const response = await axios.post(
-      SHOPIFY_API_URL,
+      shopifyConfig.getAdminApiUrl(),
       {
         product: {
           title: productData.name,
@@ -24,11 +30,12 @@ export const createProduct = async (productData: ProductData) => {
       },
       {
         headers: {
-          'X-Shopify-Access-Token': shopifyConfig.SHOPIFY_API_SECRET,
+          'X-Shopify-Access-Token': shopifyConfig.apiSecret,
           'Content-Type': 'application/json'
         }
       }
     );
+    console.log('Response from service:', response.data);
     return response.data.product;
   } catch (error) {
     throw new Error(`Failed to create product: ${error}`);
