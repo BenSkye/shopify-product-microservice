@@ -4,6 +4,7 @@ const shopifyConfig = {
   shopName: config.shopify.shopName,
   apiKey: config.shopify.apiKey,
   apiSecret: config.shopify.apiSecret,
+  apiAccessToken: config.shopify.apiAccessTokenAdmin,
   
   // Các cấu hình Shopify API
   apiVersion: '2024-01',
