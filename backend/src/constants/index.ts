@@ -1,0 +1,1 @@
+export const DEFAULT_INVENTORY_QUANTITY = 100;

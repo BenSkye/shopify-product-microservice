@@ -2,6 +2,7 @@ import { IShopifyService, IShopifyProduct } from '../interfaces/shopify.interfac
 import { IProductDTO } from '../interfaces/product.interface';
 import { shopifyConfig } from '../config';
 import { ImageValidator } from '../utils/validators';
+import { DEFAULT_INVENTORY_QUANTITY, DEFAULT_SKU } from '../constants';
 import axios from 'axios';
 import logger from '../utils/logger';
 
@@ -29,8 +30,8 @@ export class ShopifyService implements IShopifyService {
             variants: [{
               price: productData.price,
               inventory_management: 'shopify',
-              inventory_quantity: productData.inventory_quantity || 100,
-              sku: productData.sku || `SKU-${Date.now()}`
+              inventory_quantity: productData.inventory_quantity || DEFAULT_INVENTORY_QUANTITY,
+                sku: productData.sku || DEFAULT_SKU
             }],
             images: validImageUrl ? [{
               src: validImageUrl,
