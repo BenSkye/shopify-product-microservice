@@ -1,6 +1,7 @@
 import { IShopifyService, IShopifyProduct } from '../interfaces/shopify.interface';
 import { IProductDTO } from '../interfaces/product.interface';
 import { shopifyConfig } from '../config';
+import { ImageValidator } from '../utils/validators';
 import axios from 'axios';
 import logger from '../utils/logger';
 
@@ -17,14 +18,25 @@ export class ShopifyService implements IShopifyService {
     try {
       logger.info('Creating product with data:', productData);
 
+      const validImageUrl = await ImageValidator.validateImageUrl(productData.image);
+
       const response = await axios.post(
         this.apiUrl,
         {
           product: {
             title: productData.name,
             body_html: productData.description,
-            variants: [{ price: productData.price }],
-            images: [{ src: productData.image }]
+            variants: [{
+              price: productData.price,
+              inventory_management: 'shopify',
+              inventory_quantity: productData.inventory_quantity || 100,
+              sku: productData.sku || `SKU-${Date.now()}`
+            }],
+            images: validImageUrl ? [{
+              src: validImageUrl,
+              position: 1,
+              alt: productData.name
+            }] : []
           }
         },
         {
